@@ -87,7 +87,9 @@ function AdminDashboard() {
             </button>
 
             {showForm && (
-                <UserRegister></UserRegister>
+                <UserRegister
+                    notFirst={true}
+                />
             )}
 
             {loading ? (

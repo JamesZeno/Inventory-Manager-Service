@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { AuthContext } from "../../context/AuthContext";
+import '../topbar.css'
 
 function UserRegister({notFirst = false}) {
     const { authregister } = useContext(AuthContext);
@@ -17,7 +18,7 @@ function UserRegister({notFirst = false}) {
     return (
         <div>
             <h3>Auth</h3>
-            <form className="registerform" onSubmit={handleSubmit}>
+            <form className={notFirst ? "registerform" : "loginform" } onSubmit={handleSubmit}>
                 <input
                     placeholder="username"
                     type="text"
