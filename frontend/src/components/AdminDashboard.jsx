@@ -4,7 +4,7 @@ import axios from 'axios'
 import UserRegister from './Auth/UserRegister';
 
 function AdminDashboard() {
-    const { API, token, role } = useContext(AuthContext);
+    const { API, token, role, company } = useContext(AuthContext);
     const [users, setUsers] = useState([]);
     const [showForm, setShowForm] = useState(false);
     const [formData, setFormData] = useState({ username: '', password: '', firstName: '', lastName: '', role: 'Employee' });
@@ -79,7 +79,7 @@ function AdminDashboard() {
 
     return (
         <div className="admin-dashboard">
-            <h2>Company User Management</h2>
+            <h2>{company} User Management</h2>
             {error && <div className="error-banner">{error}</div>}
 
             <button onClick={() => setShowForm(!showForm)} className="btn btn-primary">
@@ -89,6 +89,7 @@ function AdminDashboard() {
             {showForm && (
                 <UserRegister
                     notFirst={true}
+                    companyName={company}
                 />
             )}
 

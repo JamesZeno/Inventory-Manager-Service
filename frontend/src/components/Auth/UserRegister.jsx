@@ -2,9 +2,9 @@ import React, { useState, useContext } from 'react'
 import { AuthContext } from "../../context/AuthContext";
 import '../topbar.css'
 
-function UserRegister({notFirst = false}) {
+function UserRegister({ notFirst = false, companyName = '' }) {
     const { authregister } = useContext(AuthContext);
-    const [newAuth, setAuth] = useState({ user: '', pwd: '', company: '', first: '', last: '', role: 'Admin' })
+    const [newAuth, setAuth] = useState({ user: '', pwd: '', company: companyName, first: '', last: '', role: 'Admin' })
 
     async function register() {
         await authregister(newAuth);
@@ -18,7 +18,7 @@ function UserRegister({notFirst = false}) {
     return (
         <div>
             <h3>Auth</h3>
-            <form className={notFirst ? "registerform" : "loginform" } onSubmit={handleSubmit}>
+            <form className={notFirst ? "registerform" : "loginform"} onSubmit={handleSubmit}>
                 <input
                     placeholder="username"
                     type="text"
@@ -71,6 +71,7 @@ function UserRegister({notFirst = false}) {
                     value={newAuth.company}
                     onChange={e => setAuth(s => ({ ...s, company: e.target.value }))}
                     required
+                    disabled={notFirst}
                 />
                 <button type="submit">Register</button>
             </form>
