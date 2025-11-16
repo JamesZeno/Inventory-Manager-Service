@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { AuthContext } from "../context/AuthContext";
 import axios from 'axios'
-import './topbar.css'
+import UserRegister from './Auth/UserRegister';
 
 function AdminDashboard() {
     const { API, token, role } = useContext(AuthContext);
@@ -87,42 +87,7 @@ function AdminDashboard() {
             </button>
 
             {showForm && (
-                <form onSubmit={handleCreateUser} className="user-form">
-                    <input
-                        placeholder="Username"
-                        value={formData.username}
-                        onChange={e => setFormData({ ...formData, username: e.target.value })}
-                        required
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={e => setFormData({ ...formData, password: e.target.value })}
-                        required
-                    />
-                    <input
-                        placeholder="First Name"
-                        value={formData.firstName}
-                        onChange={e => setFormData({ ...formData, firstName: e.target.value })}
-                        required
-                    />
-                    <input
-                        placeholder="Last Name"
-                        value={formData.lastName}
-                        onChange={e => setFormData({ ...formData, lastName: e.target.value })}
-                        required
-                    />
-                    <select
-                        value={formData.role}
-                        onChange={e => setFormData({ ...formData, role: e.target.value })}
-                    >
-                        <option value="Employee">Employee</option>
-                        <option value="Manager">Manager</option>
-                        <option value="Admin">Admin</option>
-                    </select>
-                    <button type="submit">Create User</button>
-                </form>
+                <UserRegister></UserRegister>
             )}
 
             {loading ? (

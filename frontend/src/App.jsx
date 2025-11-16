@@ -3,12 +3,14 @@ import axios from 'axios'
 import Topbar from './components/TopBar'
 import { AuthContext } from "./context/AuthContext";
 import UserRegister from './components/Auth/UserRegister';
+import AdminDashboard from "./components/AdminDashboard";
 
 function App(){
-  const { API, token } = useContext(AuthContext);
+  const { API, token, role } = useContext(AuthContext);
   const [items, setItems] = useState([])
   const [form, setForm] = useState({sku:'', name:'', qty:0})
   const [auth, setAuth] = useState({user:'', pwd:'', company:''})
+  const [showAdminPanel, setShowAdminPanel] = useState(false)
 
   const services = [
     { id: "hosting", label: "Hosting", href: "#" },
@@ -40,9 +42,13 @@ function App(){
     <div>
       <Topbar
         services={services}
+        onAdminPanelClick={() => setShowAdminPanel(!showAdminPanel)}
       />
       <div style={{paddingTop:56, width:1750}}></div>
 
+      {showAdminPanel && role === "Admin" && (
+        <AdminDashboard></AdminDashboard>
+      )}
       <section style={{marginBottom:20}}>
         <h3>Auth</h3>
         <UserRegister></UserRegister>

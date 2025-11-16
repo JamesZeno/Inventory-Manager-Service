@@ -3,17 +3,16 @@ import './topbar.css'
 import { AuthContext } from "../context/AuthContext";
 import UserLogin from "./Auth/UserLogin";
 import UserLogout from "./Auth/UserLogout";
-import AdminDashboard from "./AdminDashboard";
 
 
 function Topbar({
   services = [],
   activeServiceId = "",
   onTabChange = () => { },
+  onAdminPanelClick = () => { },
 }) {
   const { username, isAuthed, company, role } = useContext(AuthContext);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [showAdmin, setShowAdmin] = useState(false);
 
   const dropdownRef = useRef(null);
   const btnRef = useRef(null);
@@ -42,35 +41,6 @@ function Topbar({
     };
   }, [dropdownOpen]);
 
-  if (showAdmin) {
-    return (
-      <div>
-        <div className="topbar">
-          <div className="topbar_left">
-            <a>{company}</a>
-          </div>
-          <div className="navbar">
-            {services.map((svc) => (
-              <a key={svc.id} href={svc.href}
-                className={"tab " + activeServiceId === svc.id ? "tab_active" : ""}
-                onClick={(e) => {
-                  e.preventDefault();
-                  onTabChange(svc.id);
-                }}
-              >
-                {svc.id}
-              </a>
-            ))}
-          </div>
-          <div className="topbar_right">
-            <button onClick={() => setShowAdmin(false)} className="btn btn-secondary">Back</button>
-          </div>
-        </div>
-        <AdminDashboard />
-      </div>
-    );
-  }
-  
   return (
     <div className="topbar">
       {/* Left Side */}
@@ -95,7 +65,7 @@ function Topbar({
       {/* Right Side */}
       <div className="topbar_right">
         {isAuthed && role === 'Admin' && (
-          <button onClick={() => setShowAdmin(true)} className="btn btn-info">
+          <button onClick={onAdminPanelClick} className="btn btn-info">
             Admin Panel
           </button>
         )}
