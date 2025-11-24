@@ -16,8 +16,8 @@ function UserRegister({ notFirst = false, companyName = '' }) {
     }
 
     return (
-        <div>
-            <h3>Auth</h3>
+        <div className='center_div'>
+            <h3>Create Account</h3>
             <form className={notFirst ? "registerform" : "loginform"} onSubmit={handleSubmit}>
                 <input
                     placeholder="username"
