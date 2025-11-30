@@ -3,6 +3,7 @@ import axios from 'axios'
 import Topbar from './components/TopBar'
 import { AuthContext } from "./context/AuthContext";
 import AdminDashboard from "./components/AdminDashboard";
+import welcomeImg from './assets/welcome-img.png'
 import './app.css'
 
 function App(){
@@ -48,8 +49,20 @@ function App(){
         
       </div>
 
-      {showAdminPanel && role === "Admin" && (
+      {showAdminPanel && role === "Admin" ? (
         <AdminDashboard></AdminDashboard>
+      ) : (
+        // Homepage Hero
+        <div className="hero">
+          <div className="hero__left">
+            <h1>INVENTORY SYSTEM</h1>
+            <p>Welcome to the Inventory System</p>
+            <button className="btn-primary">Get Started</button>
+          </div>
+          <div className="hero__card">
+            <img src={welcomeImg} alt="Welcome" className="welcome-img" />
+          </div>
+        </div>
       )}
       <section style={{marginBottom:20}}>
         <div>Token: {token ? token.slice(0,40) + '...' : 'none'}</div>
