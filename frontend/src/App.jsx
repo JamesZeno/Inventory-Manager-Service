@@ -3,6 +3,7 @@ import axios from 'axios'
 import Topbar from './components/TopBar'
 import { AuthContext } from "./context/AuthContext";
 import AdminDashboard from "./components/AdminDashboard";
+import WarehousesPage from './pages/Warehouses'
 import welcomeImg from './assets/welcome-img.png'
 import './app.css'
 
@@ -14,6 +15,7 @@ function App(){
   const [showAdminPanel, setShowAdminPanel] = useState(false)
 
   const services = [
+    { id: "warehouses", label: "Warehouses", href: "/warehouses" },
     { id: "hosting", label: "Hosting", href: "/hosting" },
     { id: "storage", label: "Cloud Storage", href: "/storage" },
     { id: "compute", label: "Compute", href: "/compute" },
@@ -49,7 +51,10 @@ function App(){
         
       </div>
 
-      {showAdminPanel && role === "Admin" ? (
+      {/* route by pathname so TopBar remains shared across pages */}
+      {window.location.pathname.startsWith('/warehouses') ? (
+        <WarehousesPage />
+      ) : showAdminPanel && role === "Admin" ? (
         <AdminDashboard></AdminDashboard>
       ) : (
         // Homepage Hero
