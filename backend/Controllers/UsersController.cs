@@ -126,7 +126,7 @@ public class UsersController : ControllerBase
         return NoContent();
     }
 
-    static void CreatePasswordHash(string pwd, out byte[] hash, out byte[] salt)
+    public static void CreatePasswordHash(string pwd, out byte[] hash, out byte[] salt)
     {
         using var hmac = new System.Security.Cryptography.HMACSHA512();
         salt = hmac.Key;
