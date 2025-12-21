@@ -8,8 +8,16 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // --- Configuration ---
-builder.Services.AddDbContext<AppDbContext>(opts =>
-    opts.UseSqlite(builder.Configuration.GetConnectionString("DataBase") ?? "Data Source=database.db"));
+if (builder.Environment.IsEnvironment("Testing"))
+{
+    // Use in-memory DB for tests
+    builder.Services.AddDbContext<AppDbContext>(opts => opts.UseInMemoryDatabase("TestDb"));
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>(opts =>
+        opts.UseSqlite(builder.Configuration.GetConnectionString("DataBase") ?? "Data Source=database.db"));
+}
 
 builder.Services.AddCors(options =>
 {
@@ -104,3 +112,5 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
+
+public partial class Program { }

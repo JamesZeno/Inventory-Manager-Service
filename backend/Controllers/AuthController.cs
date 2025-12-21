@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
+using Backend.Helper;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -60,7 +59,7 @@ public class AuthController : ControllerBase
             }
         }
 
-        CreatePasswordHash(dto.Password, out var hash, out var salt);
+        PasswordHashing.CreatePasswordHash(dto.Password, out var hash, out var salt);
         var user = new User 
         { 
             Username = dto.Username, 
@@ -73,7 +72,7 @@ public class AuthController : ControllerBase
         };
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
-        return Ok(new { message = "User registered successfully", role });
+        return Ok(new { message = "User registered successfully", role = role.ToString() });
     }
 
     [HttpPost("login")]
@@ -83,7 +82,7 @@ public class AuthController : ControllerBase
         var user = await _db.Users.SingleOrDefaultAsync(u => u.Username == dto.Username);
         if (user == null) return Unauthorized();
 
-        if (!VerifyPasswordHash(dto.Password, user.PasswordHash, user.PasswordSalt)) return Unauthorized();
+        if (!PasswordHashing.VerifyPasswordHash(dto.Password, user.PasswordHash, user.PasswordSalt)) return Unauthorized();
 
         var (token, jti, expires) = _tokens.CreateToken(user.Username);
         return Ok(new { token, jti, expires });
@@ -124,19 +123,6 @@ public class AuthController : ControllerBase
         if (user == null) return NotFound("User not found");
 
         return Ok(new { user.Id, user.Username, user.FirstName, user.LastName, role = user.Role.ToString(), company = user.Company.Name });
-    }
-
-    static void CreatePasswordHash(string pwd, out byte[] hash, out byte[] salt)
-    {
-        using var hmac = new HMACSHA512();
-        salt = hmac.Key;
-        hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(pwd));
-    }
-    static bool VerifyPasswordHash(string pwd, byte[] hash, byte[] salt)
-    {
-        using var hmac = new HMACSHA512(salt);
-        var comp = hmac.ComputeHash(Encoding.UTF8.GetBytes(pwd));
-        return comp.SequenceEqual(hash);
     }
 }
 
