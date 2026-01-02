@@ -1,0 +1,64 @@
+.warehouses-container {
+  max-width: 1100px;
+  margin: 96px auto 32px;
+  padding: 36px;
+}
+
+.warehouses-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.warehouses-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-header-row {
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+}
+
+.cell-padding {
+  padding: 8px;
+}
+
+.warehouse-row {
+  border-bottom: 1px solid var(--line);
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-panel {
+  background: var(--panel-bg);
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  width: 400px;
+}
+
+.modal-form {
+  display: grid;
+  gap: 8px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-edit {
+  margin-right: 8px;
+}
