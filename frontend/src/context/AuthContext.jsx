@@ -5,7 +5,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
 
-    const API = import.meta.env.VITE_API_BASE || 'https://localhost:5001'
+    const API = import.meta.env.VITE_API_URL;
     const [token, setToken] = useState(localStorage.getItem('token') || '');
     const [username, setUser] = useState(localStorage.getItem('username') || '')
     const [company, setCompany] = useState(localStorage.getItem('company') || 'Inventory Management Service')
