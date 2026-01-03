@@ -53,7 +53,7 @@ function Topbar({
           <a key={svc.id} href={svc.href}
             className={"tab " + (activeServiceId === svc.id ? "tab_active" : "")}
           >
-            {svc.id}
+            {svc.label}
           </a>
         ))}
       </div>
