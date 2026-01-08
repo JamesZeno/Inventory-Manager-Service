@@ -16,7 +16,9 @@ function AllowedSKUPage() {
 
   const loadSkus = async () => {
     try {
-      const res = await axios.get(`${API}/api/allowedskus`);
+      const res = await axios.get(`${API}/api/allowedskus`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setSkus(res.data);
     } catch (e) {
       console.error(e);
