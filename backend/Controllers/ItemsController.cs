@@ -76,15 +76,14 @@ public class ItemsController : ControllerBase
 
         // Validate that the SKU is allowed for this company
         var skuAllowed = await _db.AllowedSKUs
-            .AnyAsync(s => s.Sku == dto.Sku && s.CompanyId == user.CompanyId);
-        if (!skuAllowed) return BadRequest($"SKU '{dto.Sku}' is not allowed for your company.");
+            .FirstOrDefaultAsync(s => s.Sku == dto.Sku && s.CompanyId == user.CompanyId);
+        if (skuAllowed == null) return BadRequest($"SKU '{dto.Sku}' is not allowed for your company.");
 
         var item = new Item 
         { 
-            Sku = dto.Sku, 
-            Name = dto.Name, 
-            Description = dto.Description,
+            CreatedAt = DateTime.UtcNow,
             Quantity = dto.Quantity,
+            SkuId = skuAllowed.Id,
             WarehouseId = dto.WarehouseId
         };
         _db.Items.Add(item);
@@ -99,8 +98,6 @@ public class ItemsController : ControllerBase
         var item = await _db.Items.FindAsync(id);
         if (item == null) return NotFound();
         
-        item.Name = dto.Name;
-        item.Description = dto.Description;
         item.Quantity = dto.Quantity;
         item.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
@@ -120,5 +117,5 @@ public class ItemsController : ControllerBase
     }
 }
 
-public record ItemCreateDto(string Sku, string Name, string Description, int Quantity, int WarehouseId);
-public record ItemUpdateDto(string Name, string Description, int Quantity);
+public record ItemCreateDto(int Quantity, string Sku, int WarehouseId);
+public record ItemUpdateDto(int Quantity);

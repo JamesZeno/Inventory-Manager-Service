@@ -27,14 +27,29 @@ public class AppDbContext : DbContext
             .HasForeignKey(w => w.CompanyId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Item - Warehouse relationship
+        // Item - Warehouse and AllowedSKU relationship
         modelBuilder.Entity<Item>()
             .HasOne(i => i.Warehouse)
             .WithMany(w => w.Items)
             .HasForeignKey(i => i.WarehouseId)
             .OnDelete(DeleteBehavior.Cascade);
-        // AllowedSKU - no relationships
+
+        modelBuilder.Entity<Item>()
+            .HasOne(i => i.AllowedSKU)
+            .WithMany()
+            .HasForeignKey(i => i.SkuId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Ensure (CompanyId, Sku) is unique so SKUs are scoped to a company
         modelBuilder.Entity<AllowedSKU>()
-            .HasKey(a => a.Id);
+            .HasIndex(a => new { a.CompanyId, a.Sku })
+            .IsUnique();
+
+        modelBuilder.Entity<AllowedSKU>()
+            .HasOne(a => a.Company)
+            .WithMany(c => c.AllowedSKUs)
+            .HasForeignKey(a => a.CompanyId)
+            .OnDelete(DeleteBehavior.Cascade);
+
     }
 }

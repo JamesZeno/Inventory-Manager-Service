@@ -75,7 +75,6 @@ public class AllowedSKUsController : ControllerBase
         if (sku == null) return NotFound();
         sku.Sku = dto.Sku;
         sku.Description = dto.Description;
-        sku.UpdatedAt = DateTime.UtcNow;
         await _db.SaveChangesAsync();
         return Ok(sku);
     }
