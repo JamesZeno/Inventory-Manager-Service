@@ -9,7 +9,7 @@ function ItemPage() {
   const [items, setItems] = useState([]);
   const [warehouses, setWarehouses] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState(null);
-  const [form, setForm] = useState({ id: null, sku: '', name: '', qty: 0, warehouseId: 1 });
+  const [form, setForm] = useState({ id: null, sku: '', qty: 0, warehouseId: 1 });
   const [formOpen, setFormOpen] = useState(false);
 
   useEffect(() => {
@@ -34,7 +34,9 @@ function ItemPage() {
 
   const loadItems = async () => {
     try {
-      const res = await axios.get(`${API}/api/items`);
+      const res = await axios.get(`${API}/api/items`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const all = res.data;
       if (selectedWarehouse) {
         setItems(all.filter((i) => i.warehouseId === selectedWarehouse));
@@ -47,23 +49,27 @@ function ItemPage() {
   };
 
   const openCreate = () => {
-    setForm({ id: null, sku: '', name: '', qty: 0, warehouseId: selectedWarehouse});
+    setForm({ id: null, sku: '', qty: 0, warehouseId: selectedWarehouse });
     setFormOpen(true);
   };
 
   const openEdit = (item) => {
-    setForm({ id: item.id, sku: item.sku, name: item.name, qty: item.quantity, warehouseId: item.warehouseId });
+    setForm({ id: item.id, sku: item.sku, qty: item.quantity, warehouseId: item.warehouseId });
     setFormOpen(true);
   };
 
   const submit = async (e) => {
     e.preventDefault();
     try {
-      const payload = { sku: form.sku, name: form.name, quantity: Number(form.qty), warehouseId: Number(form.warehouseId) };
+      const payload = { sku: form.sku, quantity: Number(form.qty), warehouseId: Number(form.warehouseId) };
       if (form.id) {
-        await axios.put(`${API}/api/items/${form.id}`, payload, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.put(`${API}/api/items/${form.id}`, payload, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
       } else {
-        await axios.post(`${API}/api/items`, payload, { headers: { Authorization: `Bearer ${token}` } });
+        await axios.post(`${API}/api/items`, payload, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
       }
       setFormOpen(false);
       loadItems();
@@ -114,7 +120,6 @@ function ItemPage() {
           <tr className="table-header-row">
             <th className="cell-padding">ID</th>
             <th className="cell-padding">SKU</th>
-            <th className="cell-padding">Name</th>
             <th className="cell-padding">Qty</th>
             <th className="cell-padding">Warehouse ID</th>
             <th className="cell-padding">Actions</th>
@@ -125,7 +130,6 @@ function ItemPage() {
             <tr key={i.id} className="warehouse-row">
               <td className="cell-padding">{i.id}</td>
               <td className="cell-padding">{i.sku}</td>
-              <td className="cell-padding">{i.name}</td>
               <td className="cell-padding">{i.quantity}</td>
               <td className="cell-padding">{i.warehouseId}</td>
               <td className="cell-padding">

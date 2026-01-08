@@ -25,13 +25,6 @@ function ItemFormModal({ form, setForm, open, onClose, onSubmit }) {
             onChange={e => setForm(f => ({ ...f, sku: e.target.value }))}
             required
           />
-          <label>Name</label>
-          <input
-            placeholder="Name"
-            value={form.name}
-            onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-            required
-          />
           <label>Qty</label>
           <input
             placeholder="Qty"
