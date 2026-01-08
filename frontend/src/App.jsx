@@ -73,22 +73,6 @@ function App(){
           </div>
         </div>
       )}
-      <section style={{marginBottom:20}}>
-        <div>Token: {token ? token.slice(0,40) + '...' : 'none'}</div>
-      </section>
-
-      <section>
-        <h3>Items</h3>
-        <form onSubmit={addItem}>
-          <input placeholder="sku" value={form.sku} onChange={e=>setForm(f=>({...f,sku:e.target.value}))} required />
-          <input placeholder="name" value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} required />
-          <input placeholder="qty" type="number" value={form.qty} onChange={e=>setForm(f=>({...f,qty:e.target.value}))} required />
-          <button>Add (auth required)</button>
-        </form>
-        <ul>
-          {items.map(it => <li key={it.id}>{it.sku} — {it.name} ({it.quantity ?? it.qty})</li>)}
-        </ul>
-      </section>
     </div>
   )
 }
