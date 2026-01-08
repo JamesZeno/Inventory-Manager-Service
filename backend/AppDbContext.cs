@@ -7,6 +7,7 @@ public class AppDbContext : DbContext
     public DbSet<Company> Companies => Set<Company>();
     public DbSet<Warehouse> Warehouses => Set<Warehouse>();
     public DbSet<Item> Items => Set<Item>();
+    public DbSet<AllowedSKU> AllowedSKUs => Set<AllowedSKU>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -32,5 +33,8 @@ public class AppDbContext : DbContext
             .WithMany(w => w.Items)
             .HasForeignKey(i => i.WarehouseId)
             .OnDelete(DeleteBehavior.Cascade);
+        // AllowedSKU - no relationships
+        modelBuilder.Entity<AllowedSKU>()
+            .HasKey(a => a.Id);
     }
 }
