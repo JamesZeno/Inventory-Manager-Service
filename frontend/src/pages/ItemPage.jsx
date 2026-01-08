@@ -2,13 +2,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import './warehouse.css';
+import ItemFormModal from '../components/ItemFormModal';
 
 function ItemPage() {
   const { API, token } = useContext(AuthContext);
   const [items, setItems] = useState([]);
   const [warehouses, setWarehouses] = useState([]);
   const [selectedWarehouse, setSelectedWarehouse] = useState(null);
-  const [form, setForm] = useState({ sku: '', name: '', qty: 0, warehouseId: 1 });
+  const [form, setForm] = useState({ id: null, sku: '', name: '', qty: 0, warehouseId: 1 });
+  const [formOpen, setFormOpen] = useState(false);
 
   useEffect(() => {
     loadWarehouses();
@@ -23,6 +25,7 @@ function ItemPage() {
       setWarehouses(res.data);
       if (res.data.length > 0 && !selectedWarehouse) {
         setSelectedWarehouse(res.data[0].id);
+        setForm(f => ({ ...f, warehouseId: res.data[0].id }));
       }
     } catch (e) {
       console.error('loadWarehouses', e);
@@ -43,30 +46,35 @@ function ItemPage() {
     }
   };
 
-  const addItem = async (e) => {
-    e.preventDefault();
-    await axios.post(`${API}/api/items`, {
-      sku: form.sku,
-      name: form.name,
-      quantity: Number(form.qty),
-      warehouseId: Number(form.warehouseId),
-    }, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setForm({ sku: '', name: '', qty: 0, warehouseId: selectedWarehouse || 1 });
-    loadItems();
+  const openCreate = () => {
+    setForm({ id: null, sku: '', name: '', qty: 0, warehouseId: selectedWarehouse});
+    setFormOpen(true);
   };
 
-  const updateItem = async (id) => {
-    const newName = prompt('New name');
-    if (!newName) return;
-    await axios.put(`${API}/api/items/${id}`, { name: newName, description: '', quantity: 0 }, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    loadItems();
+  const openEdit = (item) => {
+    setForm({ id: item.id, sku: item.sku, name: item.name, qty: item.quantity, warehouseId: item.warehouseId });
+    setFormOpen(true);
+  };
+
+  const submit = async (e) => {
+    e.preventDefault();
+    try {
+      const payload = { sku: form.sku, name: form.name, quantity: Number(form.qty), warehouseId: Number(form.warehouseId) };
+      if (form.id) {
+        await axios.put(`${API}/api/items/${form.id}`, payload, { headers: { Authorization: `Bearer ${token}` } });
+      } else {
+        await axios.post(`${API}/api/items`, payload, { headers: { Authorization: `Bearer ${token}` } });
+      }
+      setFormOpen(false);
+      loadItems();
+    } catch (err) {
+      console.error('save item', err);
+      alert(err?.response?.data || err.message);
+    }
   };
 
   const deleteItem = async (id) => {
+    if (!confirm('Delete this item?')) return;
     await axios.delete(`${API}/api/items/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -85,7 +93,7 @@ function ItemPage() {
             onChange={(e) => {
               const id = Number(e.target.value);
               setSelectedWarehouse(id);
-              setForm({ ...form, warehouseId: id });
+              setForm(f => ({ ...f, warehouseId: id }));
               loadItems();
             }}
           >
@@ -96,36 +104,11 @@ function ItemPage() {
             ))}
           </select>
         </div>
+        <div>
+          <button className="btn-primary" onClick={openCreate}>New Item</button>
+        </div>
       </div>
-      <form onSubmit={addItem} className="warehouses-form">
-        <input
-          placeholder="SKU"
-          value={form.sku}
-          onChange={(e) => setForm({ ...form, sku: e.target.value })}
-          required
-        />
-        <input
-          placeholder="Name"
-          value={form.name}
-          onChange={(e) => setForm({ ...form, name: e.target.value })}
-          required
-        />
-        <input
-          placeholder="Qty"
-          type="number"
-          value={form.qty}
-          onChange={(e) => setForm({ ...form, qty: e.target.value })}
-          required
-        />
-        <input
-          placeholder="Warehouse ID"
-          type="number"
-          value={form.warehouseId}
-          onChange={(e) => setForm({ ...form, warehouseId: e.target.value })}
-          required
-        />
-        <button type="submit">Add Item</button>
-      </form>
+
       <table className="warehouses-table">
         <thead>
           <tr className="table-header-row">
@@ -146,13 +129,21 @@ function ItemPage() {
               <td className="cell-padding">{i.quantity}</td>
               <td className="cell-padding">{i.warehouseId}</td>
               <td className="cell-padding">
-                <button onClick={() => updateItem(i.id)}>Edit</button>
+                <button onClick={() => openEdit(i)}>Edit</button>
                 <button onClick={() => deleteItem(i.id)}>Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      <ItemFormModal
+        form={form}
+        setForm={setForm}
+        open={formOpen}
+        onClose={() => setFormOpen(false)}
+        onSubmit={submit}
+      />
     </div>
   );
 }

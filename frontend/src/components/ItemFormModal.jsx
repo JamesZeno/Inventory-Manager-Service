@@ -1,0 +1,63 @@
+import React from 'react';
+import '../pages/warehouse.css';
+
+/**
+ * Modal form for creating or editing an item.
+ * @param {Object} props
+ * @param {Object} props.form - Current form state
+ * @param {Function} props.setForm - Setter for form state
+ * @param {boolean} props.open - Whether modal is open
+ * @param {Function} props.onClose - Close callback
+ * @param {Function} props.onSubmit - Submit callback
+ */
+function ItemFormModal({ form, setForm, open, onClose, onSubmit }) {
+  if (!open) return null;
+
+  return (
+    <div className="modal-backdrop">
+      <div className="modal-panel">
+        <h3 style={{ textAlign: 'center' }}>{form.id ? 'Edit' : 'Create'} Item</h3>
+        <form onSubmit={onSubmit} className="modal-form">
+          <label>SKU</label>
+          <input
+            placeholder="SKU"
+            value={form.sku}
+            onChange={e => setForm(f => ({ ...f, sku: e.target.value }))}
+            required
+          />
+          <label>Name</label>
+          <input
+            placeholder="Name"
+            value={form.name}
+            onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+            required
+          />
+          <label>Qty</label>
+          <input
+            placeholder="Qty"
+            type="number"
+            value={form.qty}
+            onChange={e => setForm(f => ({ ...f, qty: e.target.value }))}
+            required
+          />
+          <label>Warehouse ID</label>
+          <input
+            placeholder="Warehouse ID"
+            type="number"
+            value={form.warehouseId}
+            onChange={e => setForm(f => ({ ...f, warehouseId: e.target.value }))}
+            required
+          />
+          <button type="submit" className="btn-primary">
+            Save
+          </button>
+          <button type="button" onClick={onClose}>
+            Cancel
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default ItemFormModal;
