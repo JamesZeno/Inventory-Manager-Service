@@ -7,25 +7,6 @@ This repository contains a full‑stack inventory management solution built with
 
 The goal of this project is to serve as a personal reference for building a modern, full‑stack application with clean architecture, unit tests, and a simple deployment workflow.
 
----
-
-## Table of Contents
-
-1. [Getting Started](#getting-started)
-2. [Project Structure](#project-structure)
-3. [Backend](#backend)
-	* [Prerequisites](#backend-prerequisites)
-	* [Running the API](#backend-running-the-api)
-	* [Testing](#backend-testing)
-4. [Frontend](#frontend)
-	* [Prerequisites](#frontend-prerequisites)
-	* [Running the UI](#frontend-running-the-ui)
-5. [Deployment](#deployment)
-6. [Contributing](#contributing)
-7. [License](#license)
-
----
-
 ## Getting Started
 
 Clone the repository and navigate to the root folder:
@@ -55,8 +36,6 @@ npm run dev
 
 The UI will be served at `http://localhost:5173`.
 
----
-
 ## Project Structure
 
 ```
@@ -85,8 +64,6 @@ InventoryManagerService.sln
 └─ README.md
 ```
 
----
-
 ## Backend
 
 ### Prerequisites
@@ -110,7 +87,7 @@ The API exposes the following endpoints (prefix `/api`):
 | `/companies` | GET, POST, PUT, DELETE | CRUD for companies |
 | `/warehouses` | GET, POST, PUT, DELETE | CRUD for warehouses |
 | `/items` | GET, POST, PUT, DELETE | CRUD for Inventory Records |
-| `/allowed-skus` | GET, POST, DELETE | Manage SKUs for Items |
+| `/allowed-skus` | GET, POST, PUT, DELETE | Manage SKUs for Items |
 | `/auth` | POST | Login and obtain JWT |
 
 ### Testing
@@ -122,13 +99,11 @@ cd backend.Tests
 dotnet test
 ```
 
----
-
 ## Frontend
 
 ### Prerequisites
 
-* [Node.js](https://nodejs.org/) (v20 or newer)
+* [Node.js](https://nodejs.org/) (v22 or newer)
 * npm (comes with Node.js)
 
 ### Running the UI
@@ -150,8 +125,6 @@ cd frontend
 npm test
 ```
 
----
-
 ## Deployment
 
 The backend can be published as a self‑contained executable:
@@ -169,10 +142,6 @@ The frontend can be built for production:
 cd frontend
 npm run build
 ```
-
-The `dist` folder can be served by any static file server or embedded in the backend as static assets.
-
----
 
 ## Contributing
 
