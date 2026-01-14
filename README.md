@@ -2,7 +2,7 @@
 
 This repository contains a full‑stack inventory management solution built with a .NET 9 backend and a React frontend.  The project is split into two main parts:
 
-* **backend/** – A Web API written in C# that exposes CRUD endpoints for companies, warehouses, items, users, and SKU restrictions.  It uses Entity Framework Core with a SQLite database for persistence and JWT authentication for secure access.
+* **backend/** – A Web API written in C# that exposes CRUD endpoints for companies, warehouses, items, users, and SKU restrictions.  It uses Entity Framework Core with a SQL database for persistence and JWT authentication for secure access.
 * **frontend/** – A single‑page application (SPA) built with React and CSS. It consumes the backend API and provides a user interface for managing inventory, users, and permissions.
 
 The goal of this project is to serve as a personal reference for building a modern, full‑stack application with clean architecture, unit tests, and a simple deployment workflow.
@@ -69,7 +69,7 @@ InventoryManagerService.sln
 ### Prerequisites
 
 * [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-* SQLite (bundled with EF Core provider)
+* SQLite (default; can be configured to other databases)
 
 ### Running the API
 
