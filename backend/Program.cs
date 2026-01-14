@@ -8,6 +8,9 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // --- Configuration ---
+var databaseProvider = builder.Configuration["DatabaseProvider"] ?? "Sqlite";
+var connectionString = builder.Configuration.GetConnectionString("DataBase") ?? "Data Source=inventory.db";
+
 if (builder.Environment.IsEnvironment("Testing"))
 {
     // Use in-memory DB for tests
@@ -15,8 +18,27 @@ if (builder.Environment.IsEnvironment("Testing"))
 }
 else
 {
-    builder.Services.AddDbContext<AppDbContext>(opts =>
-        opts.UseSqlite(builder.Configuration.GetConnectionString("DataBase") ?? "Data Source=database.db"));
+    // Configure database provider based on settings
+    switch (databaseProvider.ToLower())
+    {
+        case "sqlserver":
+            builder.Services.AddDbContext<AppDbContext>(opts =>
+                opts.UseSqlServer(connectionString));
+            break;
+        case "postgresql":
+            builder.Services.AddDbContext<AppDbContext>(opts =>
+                opts.UseNpgsql(connectionString));
+            break;
+        case "mysql":
+            builder.Services.AddDbContext<AppDbContext>(opts =>
+                opts.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            break;
+        case "sqlite":
+        default:
+            builder.Services.AddDbContext<AppDbContext>(opts =>
+                opts.UseSqlite(connectionString));
+            break;
+    }
 }
 
 builder.Services.AddCors(options =>
