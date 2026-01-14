@@ -89,7 +89,11 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         db.Warehouses.Add(wh);
         db.SaveChanges();
 
-        var item = new Item { Sku = "SKU1", Name = "Test Item", Description = "Desc", Quantity = 10, WarehouseId = wh.Id };
+        var sku = new AllowedSKU {Sku = "SKU1", Description = "Test Item", CompanyId = company.Id};
+        db.AllowedSKUs.Add(sku);
+        db.SaveChanges();
+
+        var item = new Item { SkuId = sku.Id, Quantity = 10, WarehouseId = wh.Id };
         db.Items.Add(item);
         db.SaveChanges();
 
