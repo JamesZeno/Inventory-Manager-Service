@@ -45,7 +45,7 @@ function Topbar({
     <div className="topbar">
       {/* Left Side */}
       <div className="topbar_left">
-        <a>{company}</a>
+        <a href="\">{company}</a>
       </div>
       {/* Center Tab Bar */}
       <div className="navbar">
@@ -53,7 +53,7 @@ function Topbar({
           <a key={svc.id} href={svc.href}
             className={"tab " + (activeServiceId === svc.id ? "tab_active" : "")}
           >
-            {svc.id}
+            {svc.label}
           </a>
         ))}
       </div>

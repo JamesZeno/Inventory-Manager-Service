@@ -1,8 +1,8 @@
-import React from 'react'
-import '../pages/warehouse.css'
+import React from 'react';
+import '../pages/warehouse.css';
 
 /**
- * Modal form for creating or editing a warehouse.
+ * Modal form for creating or editing an allowed SKU.
  * @param {Object} props
  * @param {Object} props.form - Current form state
  * @param {Function} props.setForm - Setter for form state
@@ -10,26 +10,27 @@ import '../pages/warehouse.css'
  * @param {Function} props.onClose - Close callback
  * @param {Function} props.onSubmit - Submit callback
  */
-function WarehouseFormModal({ form, setForm, open, onClose, onSubmit }) {
-  if (!open) return null
+function AllowedSKUFormModal({ form, setForm, open, onClose, onSubmit }) {
+  if (!open) return null;
 
   return (
     <div className="modal-backdrop">
       <div className="modal-panel">
-        <h3 style={{ textAlign: 'center' }}>{form.id ? 'Edit' : 'Create'} Warehouse</h3>
+        <h3 style={{ textAlign: 'center' }}>{form.id ? 'Edit' : 'Create'} SKU</h3>
         <form onSubmit={onSubmit} className="modal-form">
-          <label>Name</label>
+          <label>SKU</label>
           <input
-            placeholder="Name"
-            value={form.name}
-            onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+            placeholder="SKU"
+            value={form.sku}
+            onChange={e => setForm(f => ({ ...f, sku: e.target.value }))}
             required
           />
-          <label>Location</label>
+          <label>Description</label>
           <input
-            placeholder="Location"
-            value={form.location}
-            onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
+            placeholder="Description"
+            value={form.description}
+            onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+            required
           />
           <button type="submit" className="btn-primary">
             Save
@@ -40,7 +41,7 @@ function WarehouseFormModal({ form, setForm, open, onClose, onSubmit }) {
         </form>
       </div>
     </div>
-  )
+  );
 }
 
-export default WarehouseFormModal
+export default AllowedSKUFormModal;

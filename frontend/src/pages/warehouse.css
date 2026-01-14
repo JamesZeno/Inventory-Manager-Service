@@ -43,20 +43,26 @@
 
 .modal-panel {
   background: var(--panel-bg);
-  padding: 12px;
-  border-radius: 8px;
+  padding: .8em;
+  border-radius: 1em;
   box-shadow: var(--shadow);
   width: 400px;
 }
 
 .modal-form {
   display: grid;
-  gap: 8px;
+  grid-template-columns: max-content auto;
+  align-items: center;
+  gap: .5em;
+}
+/* Ensure buttons in the form do not stretch to fill the grid column */
+.modal-form button {
+  align-self: start;
+  width: fit-content;
 }
 
-.form-actions {
-  display: flex;
-  gap: 8px;
+.modal-form label {
+  padding-left: 8px;
 }
 
 .btn-edit {
