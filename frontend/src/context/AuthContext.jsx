@@ -3,6 +3,22 @@ import axios from 'axios'
 
 export const AuthContext = createContext();
 
+// Helper to decode JWT and check expiration
+function isTokenExpired(token) {
+    if (!token) return true;
+    try {
+        const parts = token.split('.');
+        if (parts.length !== 3) return true;
+        const decoded = JSON.parse(atob(parts[1]));
+        const exp = decoded.exp;
+        if (!exp) return true;
+        // Check if token expires within next 60 seconds
+        return exp * 1000 < Date.now() + 60000;
+    } catch (e) {
+        return true;
+    }
+}
+
 export const AuthProvider = ({ children }) => {
 
     const API = import.meta.env.VITE_API_URL;
@@ -10,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     const [username, setUser] = useState(localStorage.getItem('username') || '')
     const [company, setCompany] = useState(localStorage.getItem('company') || 'Inventory Management Service')
     const [role, setRole] = useState(localStorage.getItem('role') || '')
-    const [isAuthed, setAuthState] = useState(token !== '');
+    const [isAuthed, setAuthState] = useState(token !== '' && !isTokenExpired(token));
 
     async function authlogin(auth) {
         try {
@@ -23,8 +39,7 @@ export const AuthProvider = ({ children }) => {
             localStorage.setItem('username', auth.user);
             setUser(auth.user);
             setToken(newtoken);
-            setAuthState(true);
-            fetchUserInfo();
+            setAuthState(!isTokenExpired(newtoken));
         } catch (error) {
             console.warn(error);
         }
@@ -70,25 +85,44 @@ export const AuthProvider = ({ children }) => {
 
     async function fetchUserInfo() {
         try {
-            if (token !== '') {
-                const res = await axios.get(`${API}/api/auth/userinfo`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                setCompany(res.data.company);
-                setRole(res.data.role);
-                localStorage.setItem('company', res.data.company);
-                localStorage.setItem('role', res.data.role);
+            if (!token || isTokenExpired(token)) {
+                authlogout();
+                return;
             }
+            const res = await axios.get(`${API}/api/auth/userinfo`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setCompany(res.data.company);
+            setRole(res.data.role);
+            localStorage.setItem('company', res.data.company);
+            localStorage.setItem('role', res.data.role);
         } catch (e) {
             console.warn('Failed to fetch user info', e);
+            if (e.response?.status === 401) {
+                authlogout();
+            }
         }
     }
 
     useEffect(() => {
         if (token !== '') {
-            fetchUserInfo();
+            fetchUserInfo(token);
         }
     }, [token]);
+
+    // Setup axios interceptor for 401 responses
+    useEffect(() => {
+        const interceptor = axios.interceptors.response.use(
+            response => response,
+            error => {
+                if (error.response?.status === 401) {
+                    authlogout();
+                }
+                return Promise.reject(error);
+            }
+        );
+        return () => axios.interceptors.response.eject(interceptor);
+    }, []);
 
     const value = { username, company, role, API, token, isAuthed, authlogin, authlogout, authregister };
 

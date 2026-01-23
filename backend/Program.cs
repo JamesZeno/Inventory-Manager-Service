@@ -67,8 +67,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// --- JWT setup ---
-var jwtKey = builder.Configuration["Jwt:Key"] ?? "ThisIsAdevKeyReplaceInProd1234567890";
+// JWT setup
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "ThisIsAdevKeyThatIsLongEnoughForJWTSigningPurposes1234567890AB";
 var issuer = builder.Configuration["Jwt:Issuer"] ?? "inventory-starter";
 var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
 
@@ -121,8 +121,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseCors();
-app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
