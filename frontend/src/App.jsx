@@ -7,7 +7,7 @@ import AllowedSKUPage from "./pages/AllowedSKUPage";
 import ItemPage from "./pages/ItemPage";
 import WarehousesPage from './pages/Warehouses'
 import welcomeImg from './assets/welcome-img.png'
-import './app.css'
+import './App.css'
 
 function App(){
   const { API, token, role } = useContext(AuthContext);

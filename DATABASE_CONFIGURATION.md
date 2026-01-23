@@ -5,9 +5,6 @@ The Inventory Manager Service supports multiple database providers. Configure yo
 ## Supported Databases
 
 ### 1. **SQLite** (Default)
-Best for: Development, prototyping, small-scale applications
-
-**appsettings.json:**
 ```json
 {
   "DatabaseProvider": "Sqlite",
@@ -18,19 +15,6 @@ Best for: Development, prototyping, small-scale applications
 ```
 
 ### 2. **SQL Server**
-Best for: Enterprise environments, Windows-based systems
-
-**appsettings.json:**
-```json
-{
-  "DatabaseProvider": "SqlServer",
-  "ConnectionStrings": {
-    "DataBase": "Server=localhost;Database=InventoryDB;Trusted_Connection=true;"
-  }
-}
-```
-
-Or with authentication:
 ```json
 {
   "DatabaseProvider": "SqlServer",
@@ -41,9 +25,6 @@ Or with authentication:
 ```
 
 ### 3. **PostgreSQL**
-Best for: Open-source environments, cloud deployments (AWS RDS, Azure Database)
-
-**appsettings.json:**
 ```json
 {
   "DatabaseProvider": "PostgreSQL",
@@ -54,9 +35,6 @@ Best for: Open-source environments, cloud deployments (AWS RDS, Azure Database)
 ```
 
 ### 4. **MySQL**
-Best for: Web hosting environments, open-source deployments (AWS RDS, Azure Database)
-
-**appsettings.json:**
 ```json
 {
   "DatabaseProvider": "MySQL",
@@ -110,14 +88,3 @@ You can use different databases for different environments by creating environme
   dotnet ef database update
   ```
 
-## Troubleshooting
-
-**Connection refused:**
-- Verify the database server is running
-- Check the connection string format for your database type
-- Ensure network connectivity and firewall rules
-
-**Database creation failed:**
-- Check user permissions for database creation
-- Verify the connection string syntax
-- Review application logs for specific error messages

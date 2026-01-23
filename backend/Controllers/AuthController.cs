@@ -80,9 +80,11 @@ public class AuthController : ControllerBase
     {
         Console.WriteLine(dto);
         var user = await _db.Users.SingleOrDefaultAsync(u => u.Username == dto.Username);
-        if (user == null) return Unauthorized();
+        if (user == null) 
+            return Unauthorized();//Return 401 for username found
 
-        if (!PasswordHashing.VerifyPasswordHash(dto.Password, user.PasswordHash, user.PasswordSalt)) return Unauthorized();
+        if (!PasswordHashing.VerifyPasswordHash(dto.Password, user.PasswordHash, user.PasswordSalt)) 
+            return Unauthorized();//Return 401 for password found
 
         var (token, jti, expires) = _tokens.CreateToken(user.Username);
         return Ok(new { token, jti, expires });

@@ -16,7 +16,22 @@ git clone https://github.com/your-username/InventoryManagerService.git
 cd InventoryManagerService
 ```
 
-### Backend
+### Option 1: Docker (Recommended)
+
+The project includes Docker support for easy deployment and development.
+
+#### Prerequisites
+* [Docker](https://www.docker.com/products/docker-desktop)
+* [Docker Compose](https://docs.docker.com/compose/install/)
+
+The services will be available at:
+* **API**: `http://localhost:8080` (with Swagger docs at `/swagger/index.html`)
+* **Frontend**: `http://localhost:3000`
+
+
+### Option 2: Local Development
+
+#### Backend
 
 ```bash
 cd backend
@@ -24,7 +39,7 @@ dotnet build
 dotnet run
 ```
 
-The API will be available at `https://localhost:5001` (HTTPS).
+The API will be available at `http://localhost:8080`.
 
 ### Frontend
 
@@ -64,12 +79,11 @@ InventoryManagerService.sln
 └─ README.md
 ```
 
-## Backend
-
 ### Prerequisites
 
 * [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
 * SQLite (default; can be configured to other databases)
+* [Node.js](https://nodejs.org/) (v22 or newer)
 
 ### Running the API
 
@@ -97,50 +111,6 @@ Unit tests are located in `backend.Tests`.  Run them with:
 ```bash
 cd backend.Tests
 dotnet test
-```
-
-## Frontend
-
-### Prerequisites
-
-* [Node.js](https://nodejs.org/) (v22 or newer)
-* npm (comes with Node.js)
-
-### Running the UI
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-The application will open at `http://localhost:5173`.
-
-### Testing
-
-The frontend uses Jest and React Testing Library.  Run tests with:
-
-```bash
-cd frontend
-npm test
-```
-
-## Deployment
-
-The backend can be published as a self‑contained executable:
-
-```bash
-cd backend
-dotnet publish -c Release -r win-x64 --self-contained
-```
-
-The resulting `publish` folder contains the executable and all dependencies.  Deploy the `publish` folder to a Windows server or use Docker for cross‑platform deployment.
-
-The frontend can be built for production:
-
-```bash
-cd frontend
-npm run build
 ```
 
 ## Contributing
